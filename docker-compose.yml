@@ -1,0 +1,48 @@
+name: mvncloner
+
+services:
+  nexus:
+    image: sonatype/nexus3
+    ports:
+      - "8081:8081"
+    volumes:
+      - nexus-data:/nexus-data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8081/service/rest/v1/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
+
+  mvncloner:
+    build: .
+    image: mvncloner-app
+    depends_on:
+      nexus:
+        condition: service_healthy
+    volumes:
+      - mirror:/mirror
+      - ./logs:/logs
+    env_file: .env
+    environment:
+      - MIRROR_PATH=/mirror/
+      - LOGGING_FILE_NAME=/logs/mvncloner.log
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    restart: unless-stopped
+    depends_on:
+      nexus:
+        condition: service_healthy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./ofelia-entrypoint.sh:/entrypoint.sh:ro
+      - ./logs:/logs
+    env_file: .env
+    environment:
+      - MIRROR_PATH=/mirror/
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+
+volumes:
+  nexus-data:
+  mirror:

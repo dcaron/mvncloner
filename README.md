@@ -72,3 +72,5 @@ You can:
 * first mirror some repositorie's content and then manually modify things in your `mirror-path` before you re-upload it to your target repository.
 
 However, when publishing from your `mirror-path`, make sure the paths to your artifacts (starting from `mirror-path`) match those in your POM. We found e.g. that in our case, Nexus3 refuses uploads whose path doesn't match the usual maven structure of `<path/to/group-id>/<artifact-id>/<version>/<artifact-file-version.xyz>` with an HTTP 400 error but without further visible hints at the cause.
+
+The `source.root-url` and `target.root-url` must have matching path depth relative to the repository root. The scraper preserves the directory structure relative to `source.root-url`, and the publisher reconstructs it relative to `target.root-url`. For example, if you mirror from `https://source/repo/com/example/` you must target `https://nexus/repository/maven-releases/com/example/` — not just `https://nexus/repository/maven-releases/`.

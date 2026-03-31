@@ -1,12 +1,16 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.1.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
 	id 'java'
 }
 
 group = 'io.github.netmikey.mvncloner'
-version = '1.0.2-SNAPSHOT'
-sourceCompatibility = '11'
+version = '2.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
@@ -14,12 +18,13 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.apache.commons:commons-lang3:3.10'
-    implementation 'net.sourceforge.htmlunit:htmlunit:2.41.0'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'org.jsoup:jsoup:1.18.3'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {

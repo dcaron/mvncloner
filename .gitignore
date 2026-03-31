@@ -31,3 +31,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+env.sh
+.env
+logs/
+mirror/
